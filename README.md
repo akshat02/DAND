@@ -1,2 +1,2 @@
-# DAND-P1
+# DAND
 Udacity Data Analyst Nanodegree Projects
