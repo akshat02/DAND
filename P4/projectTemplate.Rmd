@@ -1,0 +1,296 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+White Wine Quality Exploration by Akshat N. Tickoo
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using
+# in your analysis in this code chunk.
+
+# Notice that the parameter "echo" was set to FALSE for this code chunk.
+# This prevents the code from displaying in the knitted HTML output.
+# You should set echo=FALSE for all code chunks in your file.
+
+library(ggplot2)
+library(knitr)
+library(dplyr)
+```
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+wine_data = read.csv('wineQualityWhites.csv')
+```
+
+This report explores a dataset containing data about different components of wine taken from 4898 wine samples.
+
+# Univariate Plots Section
+```{r echo = FALSE}
+str(wine_data)
+summary(wine_data)
+```
+
+The dataset consists of 4989 observations with 12 variables.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(aes(x = fixed.acidity), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$fixed.acidity), 
+                                max(wine_data$fixed.acidity)), 
+                     breaks = seq(min(wine_data$fixed.acidity), 
+                                  max(wine_data$fixed.acidity), 1))
+summary(wine_data$fixed.acidity)
+quantile(wine_data$fixed.acidity, 0.95)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = volatile.acidity), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$volatile.acidity), 
+                                max(wine_data$volatile.acidity)), 
+                     breaks = seq(min(wine_data$volatile.acidity), 
+                                  max(wine_data$volatile.acidity), 0.1))
+summary(wine_data$volatile.acidity)
+quantile(wine_data$volatile.acidity, 0.95)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = citric.acid), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$citric.acid), 
+                                max(wine_data$citric.acid)), 
+                     breaks = seq(min(wine_data$citric.acid), 
+                                  max(wine_data$citric.acid), 0.1))
+summary(wine_data$citric.acid)
+quantile(wine_data$citric.acid, 0.95)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = chlorides), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$chlorides), 
+                                max(wine_data$chlorides)), 
+                     breaks = seq(min(wine_data$chlorides), 
+                                  max(wine_data$chlorides), 0.01))
+summary(wine_data$chlorides)
+quantile(wine_data$chlorides, 0.95)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = free.sulfur.dioxide), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$free.sulfur.dioxide), 
+                                max(wine_data$free.sulfur.dioxide)), 
+                     breaks = seq(min(wine_data$free.sulfur.dioxide), 
+                                  max(wine_data$free.sulfur.dioxide), 10))
+summary(wine_data$free.sulfur.dioxide)
+quantile(wine_data$free.sulfur.dioxide, 0.95)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = total.sulfur.dioxide), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$total.sulfur.dioxide), 
+                                max(wine_data$total.sulfur.dioxide)), 
+                     breaks = seq(min(wine_data$total.sulfur.dioxide), 
+                                  max(wine_data$total.sulfur.dioxide), 50))
+summary(wine_data$total.sulfur.dioxide)
+quantile(wine_data$total.sulfur.dioxide, 0.95)
+```
+
+
+Clearly these 6 variables have outliers as most of them (95%) are within a suitable range. If the outliers are removed we get normal distributions instead of skewed ones as described by the following.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(gridExtra)
+
+p1 = ggplot(aes(x = fixed.acidity), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$fixed.acidity), 
+                                quantile(wine_data$fixed.acidity, 0.95)), 
+                     breaks = seq(min(wine_data$fixed.acidity), 
+                                  quantile(wine_data$fixed.acidity, 0.95), 0.5))
+
+p2 = ggplot(aes(x = volatile.acidity), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$volatile.acidity), 
+                                quantile(wine_data$volatile.acidity, 0.95)), 
+                     breaks = seq(min(wine_data$volatile.acidity), 
+                                  quantile(wine_data$volatile.acidity, 0.95), 0.1))
+
+p3 = ggplot(aes(x = citric.acid), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$citric.acid), 
+                                quantile(wine_data$citric.acid, 0.95)), 
+                     breaks = seq(min(wine_data$citric.acid), 
+                                  quantile(wine_data$citric.acid, 0.95), 0.1))
+
+p4 = ggplot(aes(x = chlorides), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$chlorides), 
+                                quantile(wine_data$chlorides, 0.95)), 
+                     breaks = seq(min(wine_data$chlorides), 
+                                  quantile(wine_data$chlorides, 0.95), 0.01))
+
+p5 = ggplot(aes(x = free.sulfur.dioxide), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$free.sulfur.dioxide), 
+                                quantile(wine_data$free.sulfur.dioxide, 0.95)), 
+                     breaks = seq(min(wine_data$free.sulfur.dioxide), 
+                                  quantile(wine_data$free.sulfur.dioxide, 0.95), 5))
+
+p6 = ggplot(aes(x = total.sulfur.dioxide), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$total.sulfur.dioxide), 
+                                quantile(wine_data$total.sulfur.dioxide, 0.99)), 
+                     breaks = seq(min(wine_data$total.sulfur.dioxide), 
+                                  quantile(wine_data$total.sulfur.dioxide, 0.99), 50))
+
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 3)
+```
+
+While these four are different in their orientation. Residual Sugar, Sulphates and Alcohol levels are positively skewed while there are some outliers which are quite high in the graph of Density.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = residual.sugar), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$residual.sugar), 
+                                quantile(wine_data$residual.sugar, 0.95)), 
+                     breaks = seq(min(wine_data$residual.sugar), 
+                                  quantile(wine_data$residual.sugar, 0.95), 2))
+
+ggplot(aes(x = sulphates), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$sulphates), 
+                                max(wine_data$sulphates)), 
+                     breaks = seq(min(wine_data$sulphates), 
+                                  max(wine_data$sulphates), 0.2))
+
+ggplot(aes(x = alcohol), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$alcohol), 
+                                max(wine_data$alcohol)), 
+                     breaks = seq(min(wine_data$alcohol), 
+                                  max(wine_data$alcohol), 1))
+
+ggplot(aes(x = density), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$density), 
+                                quantile(wine_data$density, 0.95)), 
+                     breaks = seq(min(wine_data$density), 
+                                  quantile(wine_data$density, 0.95), 
+                                  0.001))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = pH), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$pH), 
+                                max(wine_data$pH)), 
+                     breaks = seq(min(wine_data$pH), 
+                                  max(wine_data$pH), 0.2))
+summary(wine_data$pH)
+quantile(wine_data$pH, 0.95)
+```
+
+While the graph of pH seems like a clear normal distribution without any outliers as denoted by the summary as well.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = quality), data = wine_data) + 
+  geom_bar() + 
+  scale_x_continuous(limits = c(min(wine_data$quality), 
+                                max(wine_data$quality)), 
+                     breaks = seq(min(wine_data$quality), 
+                                  max(wine_data$quality), 1))
+
+wine_data$quality_level <- ifelse(wine_data$quality <= 4, 'bad', 
+                                  ifelse(wine_data$quality <= 7, 'medium', 
+                                         'good'))
+```
+
+Quite evidently, most of the samples have a quality between 5-7. I've made 3 quality levels of the wine depending on their quality score, grouping them into 'good', 'medium' and 'bad'.
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+There are 4898 wine samples in this dataset having 12 variables (Fixed Acidity, Volatile Acidity, Citric Acid, Residual Sugar, Chlorides, Free Sulphur Dioxide, Total Sulphur Dioxide, Density, pH level, Sulphates, Alcohol and Quality) all numerical, with most of them being quantities. 
+
+### What is/are the main feature(s) of interest in your dataset?
+The main features seem to be the acidic levels, the sulphate levels and the alcohol levels.
+
+### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
+The free sulphur dioxide and the total sulphur dioxide can also be of support in further investigation of this dataset.
+
+### Did you create any new variables from existing variables in the dataset?
+Yes, I've made a variable quality_level, which groups the wines into 3 different types - 'good', 'medium' and 'bad', according to their quality scores.
+
+### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
+Yes, a lot many graphs seemed to be positively skewed when first plotted, but zooming in, we saw that they just have some outliers. Trimming the axis accordingly, and taking into consideration 95% of the values, the graphs on being plotted again seemed to have a normal distribution. 
+
+
+# Bivariate Plots Section
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots}
+library(GGally)
+theme_set(theme_minimal(20))
+
+set.seed(2016)
+ggpairs(wine_data[sample.int(nrow(wine_data), 1000), ])
+```
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
+
+### Did you observe any interesting relationships between the other features (not the main feature(s) of interest)?
+
+### What was the strongest relationship you found?
+
+
+
+
+# Multivariate Plots Section
+
+```{r echo=FALSE, Multivariate_Plots}
+
+```
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the investigation. Were there features that strengthened each other in terms of looking at your feature(s) of interest?
+
+### Were there any interesting or surprising interactions between features?
+
+### OPTIONAL: Did you create any models with your dataset? Discuss the strengths and limitations of your model.
+
+------
+
+# Final Plots and Summary
+
+### Plot One
+```{r echo=FALSE, Plot_One}
+
+```
+
+### Description One
+
+
+### Plot Two
+```{r echo=FALSE, Plot_Two}
+
+```
+
+### Description Two
+
+
+### Plot Three
+```{r echo=FALSE, Plot_Three}
+
+```
+
+### Description Three
+
+------
+
+# Reflection
