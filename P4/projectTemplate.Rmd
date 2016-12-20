@@ -73,7 +73,7 @@ ggplot(aes(x = chlorides), data = wine_data) +
   scale_x_continuous(limits = c(min(wine_data$chlorides), 
                                 max(wine_data$chlorides)), 
                      breaks = seq(min(wine_data$chlorides), 
-                                  max(wine_data$chlorides), 0.01))
+                                  max(wine_data$chlorides), 0.05))
 summary(wine_data$chlorides)
 quantile(wine_data$chlorides, 0.95)
 ```
@@ -84,7 +84,7 @@ ggplot(aes(x = free.sulfur.dioxide), data = wine_data) +
   scale_x_continuous(limits = c(min(wine_data$free.sulfur.dioxide), 
                                 max(wine_data$free.sulfur.dioxide)), 
                      breaks = seq(min(wine_data$free.sulfur.dioxide), 
-                                  max(wine_data$free.sulfur.dioxide), 10))
+                                  max(wine_data$free.sulfur.dioxide), 15))
 summary(wine_data$free.sulfur.dioxide)
 quantile(wine_data$free.sulfur.dioxide, 0.95)
 ```
@@ -231,13 +231,37 @@ Yes, a lot many graphs seemed to be positively skewed when first plotted, but zo
 
 
 # Bivariate Plots Section
-```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots}
+Let's look at the correlations of all the variables with each other and how strong they are.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots, fig.width=15, fig.height=15}
 library(GGally)
 theme_set(theme_minimal(20))
 
 set.seed(2016)
 ggpairs(wine_data[sample.int(nrow(wine_data), 1000), ])
 ```
+
+As seen in the above graph, we have the following considerable correlations - 
+1. Negative 0.469 between pH and fixed acidity.
+2. Residual sugar shows correlation with total sulphur dioxide (0.419), a strong correlation with density (0.831) and a negative correlation with alcohol (-0.467).
+3. Total sulphur dioxide also shows strong correlations with density (0.583) and alcohol (-0.505).
+4. Alcohol then again shows a strong negative correlation with density (-0.804).
+
+So now we'll have to see how these main features affect the quality scores of the wine samples, one feature at a time!
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(pH), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+ggplot(aes(alcohol), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = fixed.acidity, y = pH), data = wine_data) + 
+  geom_line() + geom_smooth()
+```
+
 
 # Bivariate Analysis
 
