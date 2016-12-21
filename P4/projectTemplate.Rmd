@@ -300,7 +300,9 @@ grid.arrange(p1, p2, ncol = 2)
 
 A very loose opposite relation between the two can be seen as confirmed earlier by the correlation coefficient of -0.469.
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=15, fig.height=20}
+This also suggests that better quality wines tend to have a slightly higher pH level.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=15, fig.height=15}
 p1 = ggplot(aes(x = quality_level, y = residual.sugar), data = wine_data) + 
   geom_boxplot()
 
@@ -324,16 +326,60 @@ grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
 
 Not much of relationship is visible here except a strong negative correlation with alcohol as seen in the last graph.
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+p1 = ggplot(aes(x = quality_level, y = total.sulfur.dioxide), data = wine_data) + 
+  geom_boxplot()
 
+p2 = ggplot(aes(x = quality_level, y = density), data = wine_data) + 
+  geom_boxplot()
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+Again not much of a visible correlation as suggested by our calculated coefficient of 0.583.
+
+Let's look at the relation between alcohol and density, as all our graphs yet suggest a strong negative correlation between the two.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+p1 = ggplot(aes(x = quality_level, y = alcohol), data = wine_data) + 
+  geom_boxplot()
+
+p2 = ggplot(aes(x = quality_level, y = density), data = wine_data) + 
+  geom_boxplot()
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+There we have it! As suggested by our calculated score of -0.804. 
+
+This graph also suggests that the higher the alcohol content of the wine, the better its quality and vice versa. Similarly, the lower the density of water and sugar content in the wine, the better it tastes.
+
+Let's look at two other features, whose density plots earlier intrigued me!
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=10}
+p1 = ggplot(aes(x = quality_level, y = chlorides), data = wine_data) + 
+  geom_boxplot()
+
+p2 = ggplot(aes(x = quality_level, y = free.sulfur.dioxide), data = wine_data) + 
+  geom_boxplot()
+
+grid.arrange(p1, p2, nrow = 2)
+```
+
+Better quality wines tend to have a slightly lower chloride level. Similarly they tend to have slightly more free sulphur dioxide content in them.
 
 # Bivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
+The most important relationship which came into light in this section was that between alcohol content and the quality of wine. Also density and the pH value also does seem to have an effect on the quality.
+
+Rest of the features in the dataset have mostly flat graphs as seen above.
 
 ### Did you observe any interesting relationships between the other features (not the main feature(s) of interest)?
+Yes as we saw in the last, chlorides and free sulphur dioxide seem to also have minor effects on the quality.
 
 ### What was the strongest relationship you found?
-
+The strongest relation is definitely that between the alcohol content and the quality of wine.
 
 
 
