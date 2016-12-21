@@ -249,18 +249,81 @@ As seen in the above graph, we have the following considerable correlations -
 
 So now we'll have to see how these main features affect the quality scores of the wine samples, one feature at a time!
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(aes(pH), data = wine_data) + 
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=15, fig.height=20}
+p1 = ggplot(aes(pH), data = wine_data) + 
   geom_density(alpha = 2/3, aes(fill = quality_level))
 
-ggplot(aes(alcohol), data = wine_data) + 
+p2 = ggplot(aes(alcohol), data = wine_data) + 
   geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p3 = ggplot(aes(fixed.acidity), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p4 = ggplot(aes(total.sulfur.dioxide), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p5 = ggplot(aes(free.sulfur.dioxide), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p6 = ggplot(aes(density), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p7 = ggplot(aes(residual.sugar), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p8 = ggplot(aes(chlorides), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p9 = ggplot(aes(volatile.acidity), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p10 = ggplot(aes(citric.acid), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+p11 = ggplot(aes(sulphates), data = wine_data) + 
+  geom_density(alpha = 2/3, aes(fill = quality_level))
+
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, ncol = 2)
 ```
 
+Let's look at some of these closely using boxplots
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(aes(x = fixed.acidity, y = pH), data = wine_data) + 
-  geom_line() + geom_smooth()
+p1 = ggplot(aes(x = quality_level, y = fixed.acidity), data = wine_data) + 
+  geom_boxplot()
+
+p2 = ggplot(aes(x = quality_level, y = pH), data = wine_data) + 
+  geom_boxplot()
+
+grid.arrange(p1, p2, ncol = 2)
 ```
+
+A very loose opposite relation between the two can be seen as confirmed earlier by the correlation coefficient of -0.469.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=15, fig.height=20}
+p1 = ggplot(aes(x = quality_level, y = residual.sugar), data = wine_data) + 
+  geom_boxplot()
+
+p2 = ggplot(aes(x = quality_level, y = total.sulfur.dioxide), data = wine_data) + 
+  geom_boxplot()
+
+p3 = ggplot(aes(x = quality_level, y = residual.sugar), data = wine_data) + 
+  geom_boxplot()
+
+p4 = ggplot(aes(x = quality_level, y = density), data = wine_data) + 
+  geom_boxplot()
+
+p5 = ggplot(aes(x = quality_level, y = residual.sugar), data = wine_data) + 
+  geom_boxplot()
+
+p6 = ggplot(aes(x = quality_level, y = alcohol), data = wine_data) + 
+  geom_boxplot()
+
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
+```
+
+Not much of relationship is visible here except a strong negative correlation with alcohol as seen in the last graph.
+
 
 
 # Bivariate Analysis
