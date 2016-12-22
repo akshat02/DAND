@@ -385,17 +385,102 @@ The strongest relation is definitely that between the alcohol content and the qu
 
 # Multivariate Plots Section
 
-```{r echo=FALSE, Multivariate_Plots}
+So since alcohol is one if the defining features till now, let's look at it in comparison with other features facet_wraping the quality type.
 
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots, fig.width=10, fig.height=20}
+p1 = ggplot(aes(x = alcohol, y = pH), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p2 = ggplot(aes(x = alcohol, y = fixed.acidity), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p3 = ggplot(aes(x = alcohol, y = volatile.acidity), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p4 = ggplot(aes(x = alcohol, y = citric.acid), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p5 = ggplot(aes(x = alcohol, y = residual.sugar), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p6 = ggplot(aes(x = alcohol, y = chlorides), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p7 = ggplot(aes(x = alcohol, y = free.sulfur.dioxide), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p8 = ggplot(aes(x = alcohol, y = total.sulfur.dioxide), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p9 = ggplot(aes(x = alcohol, y = density), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+p10 = ggplot(aes(x = alcohol, y = sulphates), data = wine_data) + 
+  geom_point(alpha = 1/2, pch = 21) + facet_wrap(~quality_level)
+  scale_color_brewer(type = 'div')
+  
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, ncol = 2)
 ```
+
+One thing that is clearly quite visible from the above graphs is that the corresponding values for good wines are much less dipersed in comparison with the other two quality values. Though one thing to note here is that 'good' quality wines are far outnumbered by the other two types.
+
+Let's take a closer look at some of these features one at a time.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=15}
+ggplot(aes(x = density, y = residual.sugar, color = quality_level), 
+       data = wine_data) + geom_point(position = 'jitter') + 
+  coord_cartesian(xlim = c(min(wine_data$density), 
+                           quantile(wine_data$density, 0.99)), 
+                  ylim = c(min(wine_data$residual.sugar), 
+                           quantile(wine_data$residual.sugar, 0.99))) + 
+  geom_smooth()
+```
+
+A closer look at these two variables shows us that given the same density, better wines have a higher residual sugar level.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=15}
+ggplot(aes(x = density, y = free.sulfur.dioxide, color = quality_level), 
+       data = wine_data) + geom_point(position = 'jitter') + 
+  coord_cartesian(xlim = c(min(wine_data$density), 
+                           quantile(wine_data$density, 0.99)), 
+                  ylim = c(min(wine_data$free.sulfur.dioxide), 
+                           quantile(wine_data$free.sulfur.dioxide, 0.99))) + 
+  geom_smooth()
+```
+
+A similar relationship suggesting given the same density, higher the free sulphur dioxide, the better the quality.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=15}
+ggplot(aes(x = alcohol, y = residual.sugar, color = quality_level), 
+       data = wine_data) + geom_point(position = 'jitter') + 
+  coord_cartesian(xlim = c(min(wine_data$alcohol), 
+                           quantile(wine_data$alcohol, 0.99)), 
+                  ylim = c(min(wine_data$residual.sugar), 
+                           quantile(wine_data$residual.sugar, 0.99))) + 
+  geom_smooth()
+```
+
+Again corresponding to the negative correlation we found earlier between the above two features, we see most good quality wines are high on residual sugar as well as alcohol content.
 
 # Multivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the investigation. Were there features that strengthened each other in terms of looking at your feature(s) of interest?
+Again this part validated the significance of our main feature of interest i.e. alcohol as shown by the first part of our visualizations.
+Futhermore some interesting patterns came to emerge in the next few graphs. We'll talk about them in the next question.
 
 ### Were there any interesting or surprising interactions between features?
-
-### OPTIONAL: Did you create any models with your dataset? Discuss the strengths and limitations of your model.
+Some of the interesting ones were - 
+1. The relationship between residual sugar and the density and how that affects the quality of wines.
+2. How quality levels differ when compared between free sulphur dioxide and density. 
 
 ------
 
